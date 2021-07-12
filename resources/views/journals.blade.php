@@ -14,7 +14,7 @@
     @elseif(Route::is('journals.notpublicated'))
         <form action = "{{ route('deleteall') }}" method = "post">@csrf<input  class = "bg-red-500 appearance-none rounded text-white leading-tight focus:outline-none focus:bg-gray-500 py-2 px-4 hover:bg-black  transition duration-300 ease-in-out" onclick = "return shure()" value = "Удалить все черновики" type = "submit">
     @elseif(Route::is('journals.authors' ))   
-        <p class = "font-bold text-xl">Публикации автора: @foreach($authornames as $name) {{ $name->name }} {{ $name->surname }}  {{ $name->partonymic }} @endforeach </p>
+        <p class = "font-bold text-xl">Публикации автора: @foreach($authornames as $name)  {{ $name->surname }} {{ $name->name }} {{ $name->partonymic }} @endforeach </p>
     @endif
 </div>
 

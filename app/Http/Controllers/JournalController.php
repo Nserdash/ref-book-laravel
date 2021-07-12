@@ -80,7 +80,7 @@ class JournalController extends Controller
                 'idauthor' => 'required',
             ]);    
         } elseif(isset($_POST['save'])) {
-            $validation = true;
+            $validation = true;  
         }
          else {
             $validation = $req->validate([

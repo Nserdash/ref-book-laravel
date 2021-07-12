@@ -78,7 +78,7 @@
                         <div class="md:w-2/3">                        
                             <div class = "flex flex-col max-w-full">
                                 @foreach($authors as $author)                            
-                                <p class = "bg-gray-500 mb-2 rounded p-2 text-white flex justify-between">{{ $author->name }} {{ $author->surname }} {{ $author->patronymic }} <a href = "{{ route('deletefromj',[$author->id]) }}" >x</a></p>
+                                <p class = "bg-gray-500 mb-2 rounded p-2 text-white flex justify-between"> {{ $author->surname }} {{ $author->name }} {{ $author->patronymic }} <a href = "{{ route('deletefromj',[$author->id]) }}" >x</a></p>
                                 <div class= "hidden">{{ $textauthor = 1; }}</div>
                                 @endforeach
                             </div>                            
