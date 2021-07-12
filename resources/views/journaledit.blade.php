@@ -2,12 +2,6 @@
 @section('title', 'Справочник')
 @section('content')
 
-
-
-
-
-
-
 <div class="">
     <div class="max-w-7xl mx-auto sm:px-8 lg:px-8 mb-4">    
 
