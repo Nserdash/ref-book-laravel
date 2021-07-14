@@ -5,16 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title')</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon.ico">
         
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-        <link rel="stylesheet" href = "/css/app.css">
+        <link rel="stylesheet" href="{{ asset('public/css/app.css') }}">
+        <link rel="stylesheet" href = "public/css/app.css">
 
         <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ asset('public/js/app.js') }}" defer></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
         <script>
@@ -37,22 +38,21 @@
             var error = document.getElementById('errors')
                         
 
-            if(name == "") {
-                error.textContent = 'Поле "Имя" обязательно'
-                return false;
-            }
-            
             if(surname == "") {
                 error.textContent = 'Поле "Фамилия" обязательно'
                 return false;
             }
 
+            if(name == "") {
+                error.textContent = 'Поле "Имя" обязательно'
+                return false;
+            }
+            
             if(surname.length < 3) {
                 error.textContent = 'Поле "Фамилия" должно содержать хотя бы 3 буквы'
                 return false;
             }
 
-            
         }           
 
 
@@ -80,7 +80,21 @@
 
         }           
 
-        
+
+        function checkauthor() {
+
+            var publicated = document.getElementById('publicated').value
+            var authors = document.getElementById('checkauthors').value
+            
+            if (publicated==1&&authors<2) {
+                alert('В опубликованном журнале должен быть хотя бы 1 автор.');
+                return false;
+            } else {
+                return true;
+            }
+
+        }           
+
 
         function showpop(selector) {
 
@@ -95,6 +109,9 @@
             document.querySelector(selector).style.setProperty('opacity', '1')        
             
             document.querySelector(selector).style.setProperty('transition', '0.3s')
+            
+            document.getElementById('errors').textContent = ''
+            
 
         }
 
@@ -119,7 +136,6 @@
 
             var id = inputs.querySelector('[name="id"]').value
         
-
             document.querySelector(selector).style.setProperty('visibility', 'visible')                            
             document.querySelector('#overlay').style.setProperty('display', 'block')
             document.querySelector('#overlay').style.setProperty('z-index', '1000')
@@ -132,6 +148,8 @@
             document.querySelector('#editpatronymic').value = patronymic
             document.querySelector('#editid').value = id
             
+            document.getElementById('editerrors').textContent = ''
+
         }
 
 
@@ -183,7 +201,7 @@
             function OpenFileDialog() {
                 $('#file-input').trigger('click');
             }
-
+            
             function ReadURL(input,imageSelector) {
             
                 if (input.files && input.files[0]) {
@@ -200,21 +218,21 @@
             $("#file-input").change(function () {
                 
                 var size = this.files[0].size
-
+                
                 if(2000000<size){
                     alert('Файл больше 2МБ')
+                    $('#file-input').val("")
                     return false
                 } else {
                     ReadURL(this,"#myimage");  
                     var fileVal=document.getElementById("file-input")
                     var fileBtn=document.getElementById("filebutton")
                     var fileNameOld=document.getElementById("filename").childNodes[0]                       
-                    fileNameOld.replaceWith('Изображение выбрано')  
+                    fileNameOld.replaceWith('Изображение выбрано')
                 }
 
             });
 
-   
 
             $('#select_send').on('change', function() {
                 $(this.form).submit();
@@ -223,7 +241,7 @@
 
             $(document).ready(function(){
                 var inp = document.getElementById("review-text").value.length
-                var maxCount = 210-inp;
+                var maxCount = 210;
 
                 $("#counter").html(maxCount);
 

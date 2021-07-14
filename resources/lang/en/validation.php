@@ -86,7 +86,7 @@ return [
     'mimes' => 'The :attribute must be a file of type: :values.',
     'mimetypes' => 'The :attribute must be a file of type: :values.',
     'min' => [
-        'numeric' => 'Поле :attribute должено быть хотя бы :min.',
+        'numeric' => '":attribute" должен содержать не менее :min элементов.',
         'file' => 'The :attribute must be at least :min kilobytes.',
         'string' => 'Поле ":attribute" должено быть хотя :min символов.',
         'array' => 'The :attribute must have at least :min items.',

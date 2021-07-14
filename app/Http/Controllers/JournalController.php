@@ -73,7 +73,6 @@ class JournalController extends Controller
 
     function Edit(Request $req) {
                 
-
         if(isset($_POST['idauthor'])) {
             $validation = $req->validate([                
                 'img' => 'max:2000',
@@ -85,7 +84,7 @@ class JournalController extends Controller
          else {
             $validation = $req->validate([
                 'name'=>'required',          
-                'checkauthors'=>'required',
+                'checkauthors'=>'required|numeric|min:1',
                 'img' => 'max:2000'
             ]);    
         }        
@@ -93,7 +92,7 @@ class JournalController extends Controller
         if($validation) {
             
             if($req->input('date') != NULL) {
-                $date = date("d.m.Y",strtotime($req->input('date')));
+                $date = date("Y.m.d.",strtotime($req->input('date')));
             } else {
                 $date = NULL;
             }
@@ -125,10 +124,8 @@ class JournalController extends Controller
             if(isset($_POST['publicate'])) {
                 Journal::where('id', $req->input('idjournal'))->update(array('publicated' => 1));        
                 return redirect()->route('journal');
-            } elseif(isset($_POST['save']) || isset($_POST['idauthor'])) {
-                return redirect()->route('journal.editpage' , ['id' => $req->input('idjournal')]);
             } else {
-                return redirect()->route('journal');
+               return redirect()->route('journal.editpage' , ['id' => $req->input('idjournal')]);
             }               
 
         
@@ -145,10 +142,10 @@ class JournalController extends Controller
         $admin = Journal::findOrFail($req->input('id'));
         $admin->delete();
 
-        if(isset($_POST['journalpage'])) {
-            return back();
-        } else {
+        if(isset($_POST['dontsave'])) {
             return redirect()->route('journal');
+        } else {
+            return back();
         }
                 
     }

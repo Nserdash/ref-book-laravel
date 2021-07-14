@@ -5,7 +5,7 @@
 <div class="">
     <div class="max-w-7xl mx-auto sm:px-8 lg:px-8 mb-4">    
 
-    <div class = "w-1/2 flex flex-col items-end">
+    <div class = "w-full flex flex-col items-center">
         @if($errors->any())
         @foreach($errors->all() as $error)
             <p class = "text-red-400">{{ $error }}</p>
@@ -24,15 +24,19 @@
                     
                 <div class = "w-1/3">                    
                     @if($journal->img!=NULL)
-                    <img src = "/storage/images/{{ $journal->img }}" class ="shadow sm:rounded-lg w-full"  id="myimage">
+                    <img src = "/storage/app/public/images/{{ $journal->img }}" class ="shadow sm:rounded-lg w-full"  id="myimage">
                     @else 
-                    <img src = "/images/default.png" class ="shadow sm:rounded-lg w-full"  id="myimage">
+                    <img src = "/public/images/default.png" class ="shadow sm:rounded-lg w-full"  id="myimage">
                     @endif
                 </div>
 
                 <div class = "flex flex-col justify-center items-center w-1/2">
+
                     <form action = "{{ route('journal.edit') }}" method = "post" class="w-full max-w-sm" enctype="multipart/form-data">
                     @csrf
+
+                    <input name = "publicated" id="publicated" value = "{{ $journal->publicated }}" class = "hidden">
+                    
                     <div class="md:flex md:items-center mb-10">
                         <div class="md:w-1/3">
                         <label class="block text-gray-500 font-normal md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
@@ -74,30 +78,31 @@
                             Авторы *
                         </label>
                         </div>
-                        <div class= "hidden">{{ $textauthor = NULL; }}</div>
+                        <div class= "hidden">{{ $textauthor = 0; }}</div>
                         <div class="md:w-2/3">                        
                             <div class = "flex flex-col max-w-full">
                                 @foreach($authors as $author)                            
-                                <p class = "bg-gray-500 mb-2 rounded p-2 text-white flex justify-between">{{ $author->name }} {{ $author->surname }} {{ $author->patronymic }} <a href = "{{ route('deletefromj',[$author->id]) }}" >x</a></p>
-                                <div class= "hidden">{{ $textauthor = 1; }}</div>
+                                <p class = "bg-gray-500 mb-2 rounded p-2 text-white flex justify-between">{{ $author->surname }} {{ $author->name }} {{ $author->patronymic }} 
+                                <a href = "{{ route('deletefromj',[$author->id]) }}" onclick = "return checkauthor();">x</a></p>
+                                <div class= "hidden">{{ $textauthor++; }}</div>
                                 @endforeach
                             </div>                            
                                                     
                         <select class = "bg-gray-200 max-w-full outline-none h-10 rounded" name = "idauthor" id = "select_send">                            
                                 <option disabled selected>Добавить автора</option>                                
                             @foreach($allauthors as $author)                            
-                                <option value = "{{ $author->id }}">{{ $author->name }} {{ $author->surname }} {{ $author->patronymic }}</option>                                
+                                <option value = "{{ $author->id }}">{{ $author->surname }} {{ $author->name }} {{ $author->patronymic }}</option>                                
                             @endforeach                                
                         </select>      
 
-                        <input value = "{{ $textauthor }}" class = "hidden" name = "checkauthors">  
+                        <input value = "{{ $textauthor }}" class = "hidden" name = "checkauthors" id = 'checkauthors'>  
 
                         </div>
                     </div>
                     <div class="md:flex md:items-center mb-14">
                         <div class="md:w-1/3">
                         <label class="block text-gray-500 font-normal md:text-right mb-1 md:mb-0 pr-4" for="inline-password">
-                            Дата публикации
+                            Дата выпуска
                         </label>
                         </div>
                         <div class="md:w-2/3">
@@ -106,14 +111,14 @@
                         </div>    
                     </div>
                     <div class="md:flex md:items-center justify-between">
-                        <input class="bg-gray-700 cursor-pointer appearance-none rounded w-6/12 py-3 px-4 text-white leading-tight focus:outline-none focus:bg-gray-500" type = "submit" value = "Сохранить" name = "save">                        
+                        <input class="bg-gray-700 cursor-pointer appearance-none rounded w-6/12 py-3 px-4 text-white leading-tight focus:outline-none focus:bg-gray-500 @if($journal->publicated == 1) hidden @endif" type = "submit" value = "Сохранить" name = "save">
                         @if($journal->publicated == 0)
                             <div class="bg-gray-700 text-center cursor-pointer appearance-none rounded w-5/12 py-3 px-4 text-white" onclick = "showpop('.add')">Отмена</div>                        
                         @else
-                            <a href = "{{ route('journal') }}" class="bg-gray-700 text-center cursor-pointer appearance-none rounded w-5/12 py-3 px-4 text-white leading-tight focus:outline-none focus:bg-gray-500 focus:border-blue-300">Отмена</a>
+                            <a href = "{{ route('journal') }}" class="bg-gray-700 text-center cursor-pointer appearance-none rounded w-5/12 @if($journal->publicated == 1) w-full @endif py-3 px-4 text-white leading-tight focus:outline-none focus:bg-gray-500 focus:border-blue-300">Отмена</a>
                         @endif                        
                     </div>  
-                    <input class="bg-gray-700 cursor-pointer appearance-none rounded w-full py-3 px-4 text-white leading-tight focus:outline-none focus:bg-gray-500 mt-4" type = "submit" value = "Опубликовать" name = "publicate">
+                    <input class="bg-gray-700 cursor-pointer appearance-none rounded w-full py-3 px-4 text-white leading-tight focus:outline-none focus:bg-gray-500 mt-4" type = "submit" value = "@if($journal->publicated == 1) Принять изменения @else Опубликовать @endif" name = "publicate">
                     </form>                      
                 </div>                    
 
@@ -130,7 +135,7 @@
                         <form action = "{{ route('journal.delete') }}" method = "post" name = "deleteform">
                             @csrf
                             <input class = "hidden" value = "{{ $journal->id}}" name = "id">
-                            <input class = "bg-gray-700 text-center cursor-pointer appearance-none rounded py-2 px-6 text-white leading-tight" value = "Нет" type = "submit">
+                            <input class = "bg-gray-700 text-center cursor-pointer appearance-none rounded py-2 px-6 text-white leading-tight" value = "Нет" type = "submit" name = "dontsave">
                         </form> 
                         </div>
                     </div>

@@ -25,7 +25,7 @@ Route::post('/Добавление журнала', '\App\Http\Controllers\Journ
 
 Route::get('/Журнал/{id}', '\App\Http\Controllers\JournalController@EditPage')->name('journal.editpage');
 
-Route::post('/journaledit', '\App\Http\Controllers\JournalController@Edit')->name('journal.edit');
+Route::post('/edit', '\App\Http\Controllers\JournalController@Edit')->name('journal.edit');
 
 Route::get('/Черновики', '\App\Http\Controllers\JournalController@AllNotPub')->name('journals.notpublicated');
 
